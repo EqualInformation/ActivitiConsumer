@@ -18,7 +18,7 @@ import com.vaadin.ui.VerticalLayout;
  */
 @Theme("mytheme")
 @Widgetset("com.equalinformation.bpm.poc.consumer.MyAppWidgetset")
-public class MyUI extends UI {
+public class ActivitiConsumerUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -38,7 +38,7 @@ public class MyUI extends UI {
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
-    @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
+    @VaadinServletConfiguration(ui = ActivitiConsumerUI.class, productionMode = false)
     public static class MyUIServlet extends VaadinServlet {
     }
 }
