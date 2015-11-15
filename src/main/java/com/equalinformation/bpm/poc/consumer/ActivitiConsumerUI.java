@@ -1,17 +1,15 @@
 package com.equalinformation.bpm.poc.consumer;
 
-import javax.servlet.annotation.WebServlet;
-
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+
+import javax.servlet.annotation.WebServlet;
 
 /**
  *
@@ -26,14 +24,25 @@ public class ActivitiConsumerUI extends UI {
         layout.setMargin(true);
         setContent(layout);
 
-        Button button = new Button("Click Mee");
-        button.addClickListener(new Button.ClickListener() {
-            @Override
-            public void buttonClick(ClickEvent event) {
-                layout.addComponent(new Label("Thank you for clicking"));
-            }
-        });
-        layout.addComponent(button);
+        MenuBar menuBar = new MenuBar();
+
+        MenuBar.MenuItem tasks = menuBar.addItem("Tasks", null, null);
+        MenuBar.MenuItem processes = menuBar.addItem("Processes", null, null);
+        MenuBar.MenuItem reports = menuBar.addItem("Reports", null, null);
+        MenuBar.MenuItem manage = menuBar.addItem("Manage", null, null);
+
+
+
+
+//        Button button = new Button("Click Mee");
+//        button.addClickListener(new Button.ClickListener() {
+//            @Override
+//            public void buttonClick(ClickEvent event) {
+//                layout.addComponent(new Label("Thank you for clicking"));
+//            }
+//        });
+
+        layout.addComponent(menuBar);
 
     }
 
