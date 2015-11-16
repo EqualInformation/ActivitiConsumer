@@ -17,6 +17,7 @@ import javax.swing.*;
 /**
  * Created by : bpupadhyaya on 11-15-2015
  */
+
 @Theme("mytheme")
 @Widgetset("com.equalinformation.bpm.poc.consumer.MyAppWidgetset")
 public class ActivitiConsumerUI extends UI {
