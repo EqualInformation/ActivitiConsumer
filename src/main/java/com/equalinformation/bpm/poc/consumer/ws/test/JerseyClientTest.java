@@ -1,9 +1,19 @@
 package com.equalinformation.bpm.poc.consumer.ws.test;
 
+import com.equalinformation.bpm.poc.consumer.ws.domain.Task;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by bpupadhyaya on 11/16/15.
@@ -25,6 +35,30 @@ public class JerseyClientTest {
             String output = response.getEntity(String.class);
             System.out.println("Output from Server .... \n");
             System.out.println(output);
+
+            // Manually parsing until get the "data" element.
+            JsonParser parser = new JsonParser();
+            JsonObject rootObject = parser.parse(output).getAsJsonObject();
+            JsonElement taskElement = rootObject.get("data");
+
+            Gson gson = new Gson();
+            List<Task> taskList = new ArrayList<Task>();
+
+            // Check if "task" element is an array or an object and parse accordingly.
+            if (taskElement.isJsonObject()) {
+                //The returned list has only 1 element
+                Task task = gson.fromJson(taskElement, Task.class);
+                taskList.add(task);
+            }
+            else if (taskElement.isJsonArray()) {
+                //The returned list has >1 elements
+                Type projectListType = new TypeToken<List<Task>>() {}.getType();
+                taskList = gson.fromJson(taskElement, projectListType);
+            }
+
+            System.out.println("Size of list: " + taskList.size());
+            System.out.println("Some data from first element: " + taskList.get(0).getName());
+
 
         } catch (Exception e) {
             e.printStackTrace();

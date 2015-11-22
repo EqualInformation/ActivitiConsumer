@@ -1,18 +1,17 @@
 package com.equalinformation.bpm.poc.consumer;
 
+import com.equalinformation.bpm.poc.consumer.ws.ActivitiRESTClient;
+import com.equalinformation.bpm.poc.consumer.ws.domain.Task;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.*;
 import com.vaadin.ui.MenuBar.MenuItem;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 
 import javax.servlet.annotation.WebServlet;
-import javax.swing.*;
+import java.util.List;
 
 /**
  * Created by : bpupadhyaya on 11-15-2015
@@ -43,13 +42,84 @@ public class ActivitiConsumerUI extends UI {
             }
         };
 
-        MenuBar menuBar = createMenuBar(menuCommand);
+        MenuBar.Command inboxCommand = new MenuBar.Command() {
+            public void menuSelected(MenuItem selectedItem) {
+                createActivitiTaskTable(layout);
+            }
+        };
+
+        MenuBar menuBar = createMenuBar(menuCommand, inboxCommand);
 
         layout.addComponent(menuBar);
 
     }
 
-    private MenuBar createMenuBar(MenuBar.Command menuCommand) {
+    private void createActivitiTaskTable(VerticalLayout layout) {
+        Table table = new Table("Inbox");
+
+        // Columns
+        table.addContainerProperty("ID", String.class, null);
+        table.addContainerProperty("URL",  String.class, null);
+        table.addContainerProperty("Owner", String.class, null);
+        table.addContainerProperty("Asignee",  String.class, null);
+        table.addContainerProperty("Delegation State",  String.class, null);
+        table.addContainerProperty("Name", String.class, null);
+        table.addContainerProperty("Description",  String.class, null);
+        table.addContainerProperty("Create time", String.class, null);
+        table.addContainerProperty("Due date",  String.class, null);
+        table.addContainerProperty("Priority",  String.class, null);
+        table.addContainerProperty("Suspended", String.class, null);
+        table.addContainerProperty("Task definition key",  String.class, null);
+        table.addContainerProperty("Tenant ID", String.class, null);
+        table.addContainerProperty("Category",  String.class, null);
+        table.addContainerProperty("Form key",  String.class, null);
+        table.addContainerProperty("Parent task ID", String.class, null);
+        table.addContainerProperty("Parent task URL",  String.class, null);
+        table.addContainerProperty("Execution ID", String.class, null);
+        table.addContainerProperty("Execution URL",  String.class, null);
+        table.addContainerProperty("Process definition ID",  String.class, null);
+        table.addContainerProperty("Process definition URL", String.class, null);
+        //table.addContainerProperty("Variables",  String[].class, null);
+
+        ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
+        List<Task> taskList = activitiRESTClient.getTaskList();
+        System.out.println("First element ID: "+taskList.get(0).getId());
+
+        // Rows
+        int i = 0;
+        for(Task task: taskList) {
+            table.addItem(new Object[]{task.getId(), task.getUrl(),
+                    task.getOwner(),
+                    task.getAssignee(),
+                    task.getDelegationState(),
+                    task.getName(),
+                    task.getDescription(),
+                    task.getCreateTime(),
+                    task.getDueDate(),
+                    task.getPriority(),
+                    task.getSuspended(),
+                    task.getTaskDefinitionKey(),
+                    task.getTenantId(),
+                    task.getCategory(),
+                    task.getFormKey(),
+                    task.getParentTaskId(),
+                    task.getParentTaskURL(),
+                    task.getExecutionId(),
+                    task.getExecutionURL(),
+                    task.getProcessDefinitionId(),
+                    task.getProcessDefinitionURL()
+                    //task.getVariables()
+            },
+                    ++i);
+        }
+
+        // Show exactly the currently contained rows (items)
+        table.setPageLength(table.size());
+
+        layout.addComponent(table);
+    }
+
+    private MenuBar createMenuBar(MenuBar.Command menuCommand, MenuBar.Command inboxCommand) {
         MenuBar menuBar = new MenuBar();
 
         MenuItem tasks = menuBar.addItem("Tasks", null, null);
@@ -57,7 +127,7 @@ public class ActivitiConsumerUI extends UI {
         MenuItem reports = menuBar.addItem("Reports", null, null);
         MenuItem manage = menuBar.addItem("Manage", null, null);
 
-        MenuItem inbox = tasks.addItem("Inbox", null, menuCommand);
+        MenuItem inbox = tasks.addItem("Inbox", null, inboxCommand);
         tasks.addSeparator();
         MenuItem queued = tasks.addItem("Queued", null, menuCommand);
         tasks.addSeparator();
