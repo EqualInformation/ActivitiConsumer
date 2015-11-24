@@ -89,7 +89,8 @@ public class ActivitiConsumerUI extends UI {
         // Rows
         int i = 0;
         for(Task task: taskList) {
-            summaryTable.addItem(new Object[]{task.getId(), task.getUrl(),
+            summaryTable.addItem(new Object[]{task.getId(),
+                    task.getUrl(),
 //                    task.getOwner(),
 //                    task.getAssignee(),
 //                    task.getDelegationState(),
