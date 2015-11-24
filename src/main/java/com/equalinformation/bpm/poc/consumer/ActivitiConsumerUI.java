@@ -148,7 +148,7 @@ public class ActivitiConsumerUI extends UI {
 //        detailTable.addContainerProperty("Process definition ID",  String.class, null);
 //        detailTable.addContainerProperty("Process definition URL", String.class, null);
         //table.addContainerProperty("Variables",  String[].class, null);
-        detailTable.addContainerProperty("Action", String.class, null);
+        detailTable.addContainerProperty("Action", Button.class, null);
 
         ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
         List<Task> taskList = activitiRESTClient.getTaskList();
@@ -157,6 +157,7 @@ public class ActivitiConsumerUI extends UI {
         // Rows
         int i = 0;
         for(Task task: taskList) {
+            task.getAction().setCaption("Complete");
             detailTable.addItem(new Object[]{task.getId(),
 //                    task.getUrl(),
 //                    task.getOwner(),
@@ -179,7 +180,7 @@ public class ActivitiConsumerUI extends UI {
 //                    task.getProcessDefinitionId(),
 //                    task.getProcessDefinitionURL()
                             //task.getVariables()
-                    "None"
+                    task.getAction()
                     },
                     ++i);
         }
