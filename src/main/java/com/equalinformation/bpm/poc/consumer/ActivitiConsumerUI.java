@@ -44,7 +44,8 @@ public class ActivitiConsumerUI extends UI {
 
         MenuBar.Command inboxCommand = new MenuBar.Command() {
             public void menuSelected(MenuItem selectedItem) {
-                createActivitiTaskTable(layout);
+                createActivitiTaskTableSummary(layout);
+                createActivitiTaskTableDetail(layout);
             }
         };
 
@@ -54,31 +55,96 @@ public class ActivitiConsumerUI extends UI {
 
     }
 
-    private void createActivitiTaskTable(VerticalLayout layout) {
-        Table table = new Table("Inbox");
+    private void createActivitiTaskTableSummary(VerticalLayout layout) {
+        Table summaryTable = new Table("Inbox-Summary");
 
         // Columns
-        table.addContainerProperty("ID", String.class, null);
-        table.addContainerProperty("URL",  String.class, null);
-        table.addContainerProperty("Owner", String.class, null);
-        table.addContainerProperty("Asignee",  String.class, null);
-        table.addContainerProperty("Delegation State",  String.class, null);
-        table.addContainerProperty("Name", String.class, null);
-        table.addContainerProperty("Description",  String.class, null);
-        table.addContainerProperty("Create time", String.class, null);
-        table.addContainerProperty("Due date",  String.class, null);
-        table.addContainerProperty("Priority",  String.class, null);
-        table.addContainerProperty("Suspended", String.class, null);
-        table.addContainerProperty("Task definition key",  String.class, null);
-        table.addContainerProperty("Tenant ID", String.class, null);
-        table.addContainerProperty("Category",  String.class, null);
-        table.addContainerProperty("Form key",  String.class, null);
-        table.addContainerProperty("Parent task ID", String.class, null);
-        table.addContainerProperty("Parent task URL",  String.class, null);
-        table.addContainerProperty("Execution ID", String.class, null);
-        table.addContainerProperty("Execution URL",  String.class, null);
-        table.addContainerProperty("Process definition ID",  String.class, null);
-        table.addContainerProperty("Process definition URL", String.class, null);
+        summaryTable.addContainerProperty("ID", String.class, null);
+        summaryTable.addContainerProperty("URL",  String.class, null);
+//        summaryTable.addContainerProperty("Owner", String.class, null);
+//        summaryTable.addContainerProperty("Assignee",  String.class, null);
+//        summaryTable.addContainerProperty("Delegation State",  String.class, null);
+//        summaryTable.addContainerProperty("Name", String.class, null);
+//        summaryTable.addContainerProperty("Description",  String.class, null);
+//        summaryTable.addContainerProperty("Create time", String.class, null);
+//        summaryTable.addContainerProperty("Due date",  String.class, null);
+//        summaryTable.addContainerProperty("Priority",  String.class, null);
+//        summaryTable.addContainerProperty("Suspended", String.class, null);
+//        summaryTable.addContainerProperty("Task definition key",  String.class, null);
+//        summaryTable.addContainerProperty("Tenant ID", String.class, null);
+//        summaryTable.addContainerProperty("Category",  String.class, null);
+//        summaryTable.addContainerProperty("Form key",  String.class, null);
+//        summaryTable.addContainerProperty("Parent task ID", String.class, null);
+//        summaryTable.addContainerProperty("Parent task URL",  String.class, null);
+//        summaryTable.addContainerProperty("Execution ID", String.class, null);
+//        summaryTable.addContainerProperty("Execution URL",  String.class, null);
+//        summaryTable.addContainerProperty("Process definition ID",  String.class, null);
+//        summaryTable.addContainerProperty("Process definition URL", String.class, null);
+//        summaryTable.addContainerProperty("Variables",  String[].class, null);
+
+        ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
+        List<Task> taskList = activitiRESTClient.getTaskList();
+        System.out.println("First element ID: "+taskList.get(0).getId());
+
+        // Rows
+        int i = 0;
+        for(Task task: taskList) {
+            summaryTable.addItem(new Object[]{task.getId(), task.getUrl(),
+//                    task.getOwner(),
+//                    task.getAssignee(),
+//                    task.getDelegationState(),
+//                    task.getName(),
+//                    task.getDescription(),
+//                    task.getCreateTime(),
+//                    task.getDueDate(),
+//                    task.getPriority(),
+//                    task.getSuspended(),
+//                    task.getTaskDefinitionKey(),
+//                    task.getTenantId(),
+//                    task.getCategory(),
+//                    task.getFormKey(),
+//                    task.getParentTaskId(),
+//                    task.getParentTaskURL(),
+//                    task.getExecutionId(),
+//                    task.getExecutionURL(),
+//                    task.getProcessDefinitionId(),
+//                    task.getProcessDefinitionURL()
+                    //task.getVariables()
+            },
+                    ++i);
+        }
+
+        // Show exactly the currently contained rows (items)
+        summaryTable.setPageLength(summaryTable.size());
+
+        layout.addComponent(summaryTable);
+    }
+
+    private void createActivitiTaskTableDetail(VerticalLayout layout) {
+        Table detailTable = new Table("Inbox-Detail");
+
+        // Columns
+        detailTable.addContainerProperty("ID", String.class, null);
+//        detailTable.addContainerProperty("URL",  String.class, null);
+//        detailTable.addContainerProperty("Owner", String.class, null);
+//        detailTable.addContainerProperty("Assignee",  String.class, null);
+//        detailTable.addContainerProperty("Delegation State",  String.class, null);
+//        detailTable.addContainerProperty("Name", String.class, null);
+//        detailTable.addContainerProperty("Description",  String.class, null);
+        detailTable.addContainerProperty("Create time", String.class, null);
+//        detailTable.addContainerProperty("Due date",  String.class, null);
+        detailTable.addContainerProperty("Priority",  String.class, null);
+        detailTable.addContainerProperty("Suspended", String.class, null);
+//        detailTable.addContainerProperty("Task definition key",  String.class, null);
+//        detailTable.addContainerProperty("Tenant ID", String.class, null);
+//        detailTable.addContainerProperty("Category",  String.class, null);
+//        detailTable.addContainerProperty("Form key",  String.class, null);
+//        detailTable.addContainerProperty("Parent task ID", String.class, null);
+//        detailTable.addContainerProperty("Parent task URL",  String.class, null);
+        detailTable.addContainerProperty("Execution ID", String.class, null);
+//        detailTable.addContainerProperty("Execution URL",  String.class, null);
+//        detailTable.addContainerProperty("Process definition ID",  String.class, null);
+//        detailTable.addContainerProperty("Process definition URL", String.class, null);
         //table.addContainerProperty("Variables",  String[].class, null);
 
         ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
@@ -88,35 +154,36 @@ public class ActivitiConsumerUI extends UI {
         // Rows
         int i = 0;
         for(Task task: taskList) {
-            table.addItem(new Object[]{task.getId(), task.getUrl(),
-                    task.getOwner(),
-                    task.getAssignee(),
-                    task.getDelegationState(),
-                    task.getName(),
-                    task.getDescription(),
+            detailTable.addItem(new Object[]{task.getId(),
+//                    task.getUrl(),
+//                    task.getOwner(),
+//                    task.getAssignee(),
+//                    task.getDelegationState(),
+//                    task.getName(),
+//                    task.getDescription(),
                     task.getCreateTime(),
-                    task.getDueDate(),
+//                    task.getDueDate(),
                     task.getPriority(),
                     task.getSuspended(),
-                    task.getTaskDefinitionKey(),
-                    task.getTenantId(),
-                    task.getCategory(),
-                    task.getFormKey(),
-                    task.getParentTaskId(),
-                    task.getParentTaskURL(),
+//                    task.getTaskDefinitionKey(),
+//                    task.getTenantId(),
+//                    task.getCategory(),
+//                    task.getFormKey(),
+//                    task.getParentTaskId(),
+//                    task.getParentTaskURL(),
                     task.getExecutionId(),
-                    task.getExecutionURL(),
-                    task.getProcessDefinitionId(),
-                    task.getProcessDefinitionURL()
-                    //task.getVariables()
-            },
+//                    task.getExecutionURL(),
+//                    task.getProcessDefinitionId(),
+//                    task.getProcessDefinitionURL()
+                            //task.getVariables()
+                    },
                     ++i);
         }
 
         // Show exactly the currently contained rows (items)
-        table.setPageLength(table.size());
+        detailTable.setPageLength(detailTable.size());
 
-        layout.addComponent(table);
+        layout.addComponent(detailTable);
     }
 
     private MenuBar createMenuBar(MenuBar.Command menuCommand, MenuBar.Command inboxCommand) {
