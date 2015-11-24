@@ -123,6 +123,7 @@ public class ActivitiConsumerUI extends UI {
 
     private void createActivitiTaskTableDetail(VerticalLayout layout) {
         Table detailTable = new Table("Inbox-Detail");
+        detailTable.setSelectable(true);
 
         // Columns
         detailTable.addContainerProperty("ID", String.class, null);
@@ -130,7 +131,7 @@ public class ActivitiConsumerUI extends UI {
 //        detailTable.addContainerProperty("Owner", String.class, null);
 //        detailTable.addContainerProperty("Assignee",  String.class, null);
 //        detailTable.addContainerProperty("Delegation State",  String.class, null);
-//        detailTable.addContainerProperty("Name", String.class, null);
+        detailTable.addContainerProperty("Name", String.class, null);
 //        detailTable.addContainerProperty("Description",  String.class, null);
         detailTable.addContainerProperty("Create time", String.class, null);
 //        detailTable.addContainerProperty("Due date",  String.class, null);
@@ -147,6 +148,7 @@ public class ActivitiConsumerUI extends UI {
 //        detailTable.addContainerProperty("Process definition ID",  String.class, null);
 //        detailTable.addContainerProperty("Process definition URL", String.class, null);
         //table.addContainerProperty("Variables",  String[].class, null);
+        detailTable.addContainerProperty("Action", String.class, null);
 
         ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
         List<Task> taskList = activitiRESTClient.getTaskList();
@@ -160,7 +162,7 @@ public class ActivitiConsumerUI extends UI {
 //                    task.getOwner(),
 //                    task.getAssignee(),
 //                    task.getDelegationState(),
-//                    task.getName(),
+                    task.getName(),
 //                    task.getDescription(),
                     task.getCreateTime(),
 //                    task.getDueDate(),
@@ -177,6 +179,7 @@ public class ActivitiConsumerUI extends UI {
 //                    task.getProcessDefinitionId(),
 //                    task.getProcessDefinitionURL()
                             //task.getVariables()
+                    "None"
                     },
                     ++i);
         }
