@@ -158,6 +158,7 @@ public class ActivitiConsumerUI extends UI {
         int i = 0;
         for(Task task: taskList) {
             task.getAction().setCaption("Complete");
+            task.getAction().setData(task.getId());
             task.getAction().addListener(new TaskActionListener()); //TODO
 
             detailTable.addItem(new Object[]{task.getId(),
@@ -218,8 +219,13 @@ public class ActivitiConsumerUI extends UI {
     private class TaskActionListener implements Button.ClickListener {
         @Override
         public void buttonClick(Button.ClickEvent event) {
-            String data = (String) event.getButton().getData();
-            System.out.println("Button clicked : " + data);
+            boolean completed = false;
+            String taskId = (String) event.getButton().getData();
+            System.out.println("Button clicked : " + taskId);
+
+            ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
+            completed = activitiRESTClient.completeTask(taskId);
+            System.out.println("Status: " + ((completed) ? "completed":"failed"));
 
         }
     }

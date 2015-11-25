@@ -69,4 +69,11 @@ public class ActivitiRESTClient {
         return taskList;
     }
 
+    public boolean completeTask(String taskId) {
+        boolean success = false;
+        //TODO
+
+        return success;
+    }
+
 }
