@@ -1,5 +1,7 @@
 package com.equalinformation.bpm.poc.consumer.ws.domain;
 
+import com.vaadin.ui.Button;
+
 /**
  * Created by bpupadhyaya on 11/17/15.
  */
@@ -28,6 +30,7 @@ public class Task {
     private String processDefinitionId;
     private String processDefinitionURL;
     private String[] variables;
+    private Button action;
 
     public String getId() {
         return id;
@@ -219,6 +222,18 @@ public class Task {
 
     public void setVariables(String[] variables) {
         this.variables = variables;
+    }
+
+    public Button getAction() {
+        if(this.action == null) {
+            action = new Button("Action");
+        }
+
+        return action;
+    }
+
+    public void setAction(Button action) {
+        this.action = action;
     }
 }
 
