@@ -158,6 +158,8 @@ public class ActivitiConsumerUI extends UI {
         int i = 0;
         for(Task task: taskList) {
             task.getAction().setCaption("Complete");
+            task.getAction().addListener(new TaskActionListener()); //TODO
+
             detailTable.addItem(new Object[]{task.getId(),
 //                    task.getUrl(),
 //                    task.getOwner(),
@@ -213,4 +215,15 @@ public class ActivitiConsumerUI extends UI {
         return menuBar;
     }
 
+    private class TaskActionListener implements Button.ClickListener {
+        @Override
+        public void buttonClick(Button.ClickEvent event) {
+            String data = (String) event.getButton().getData();
+            System.out.println("Button clicked : " + data);
+
+        }
+    }
+
 }
+
+
