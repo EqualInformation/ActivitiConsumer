@@ -71,7 +71,24 @@ public class ActivitiRESTClient {
 
     public boolean completeTask(String taskId) {
         boolean success = false;
-        //TODO
+        try {
+            Client client = Client.create();
+            client.addFilter(new HTTPBasicAuthFilter("kermit", "kermit"));
+            WebResource webResource = client.resource("http://localhost:8091/activiti-rest/service/runtime/tasks/"+taskId);
+            String input = "{\"action\":\"complete\", "
+                    + "\"variables\":[]}";
+            ClientResponse response = webResource.accept("application/json")
+                    .type("application/json").post(ClientResponse.class, input);
+
+            if (response.getStatus() != 200) {
+                throw new RuntimeException("Activiti call failed : HTTP error code : "
+                        + response.getStatus());
+            }
+            success = true;
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 
         return success;
     }
