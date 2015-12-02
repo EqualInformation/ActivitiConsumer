@@ -5,12 +5,16 @@ import com.equalinformation.bpm.poc.consumer.ws.domain.Task;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
+import com.vaadin.data.Container;
+import com.vaadin.data.Item;
+import com.vaadin.data.Property;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.*;
 import com.vaadin.ui.MenuBar.MenuItem;
 
 import javax.servlet.annotation.WebServlet;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +29,12 @@ public class ActivitiConsumerUI extends UI {
     @VaadinServletConfiguration(ui = ActivitiConsumerUI.class, productionMode = false)
     public static class MyUIServlet extends VaadinServlet {
     }
+
+    Table summaryTable = new Table("Inbox-Summary");
+    Table detailTable = new Table("Inbox-Detail");
+    ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
+    List<Task> taskList = new ArrayList<Task>();
+
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -49,6 +59,8 @@ public class ActivitiConsumerUI extends UI {
             }
         };
 
+        taskList = fetchTaskDataFromActivitiEngine();
+
         MenuBar menuBar = createMenuBar(menuCommand, inboxCommand);
 
         layout.addComponent(menuBar);
@@ -56,7 +68,6 @@ public class ActivitiConsumerUI extends UI {
     }
 
     private void createActivitiTaskTableSummary(VerticalLayout layout) {
-        Table summaryTable = new Table("Inbox-Summary");
 
         // Columns
         summaryTable.addContainerProperty("ID", String.class, null);
@@ -81,10 +92,6 @@ public class ActivitiConsumerUI extends UI {
 //        summaryTable.addContainerProperty("Process definition ID",  String.class, null);
 //        summaryTable.addContainerProperty("Process definition URL", String.class, null);
 //        summaryTable.addContainerProperty("Variables",  String[].class, null);
-
-        ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
-        List<Task> taskList = activitiRESTClient.getTaskList();
-        System.out.println("First element ID: "+taskList.get(0).getId());
 
         // Rows
         int i = 0;
@@ -122,7 +129,6 @@ public class ActivitiConsumerUI extends UI {
     }
 
     private void createActivitiTaskTableDetail(VerticalLayout layout) {
-        Table detailTable = new Table("Inbox-Detail");
         detailTable.setSelectable(true);
 
         // Columns
@@ -149,10 +155,6 @@ public class ActivitiConsumerUI extends UI {
 //        detailTable.addContainerProperty("Process definition URL", String.class, null);
         //table.addContainerProperty("Variables",  String[].class, null);
         detailTable.addContainerProperty("Action", Button.class, null);
-
-        ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
-        List<Task> taskList = activitiRESTClient.getTaskList();
-        System.out.println("First element ID: "+taskList.get(0).getId());
 
         // Rows
         int i = 0;
@@ -194,6 +196,12 @@ public class ActivitiConsumerUI extends UI {
         layout.addComponent(detailTable);
     }
 
+    private List<Task> fetchTaskDataFromActivitiEngine() {
+        taskList = activitiRESTClient.getTaskList();
+        System.out.println("First element ID: "+taskList.get(0).getId());
+        return taskList;
+    }
+
     private MenuBar createMenuBar(MenuBar.Command menuCommand, MenuBar.Command inboxCommand) {
         MenuBar menuBar = new MenuBar();
 
@@ -223,9 +231,15 @@ public class ActivitiConsumerUI extends UI {
             String taskId = (String) event.getButton().getData();
             System.out.println("Button clicked : " + taskId);
 
-            ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
             completed = activitiRESTClient.completeTask(taskId);
-            System.out.println("Status: " + ((completed) ? "completed":"failed"));
+
+            if (completed == true) {
+                System.out.println("Status: " + ((completed) ? "completed":"failed"));
+                Container container = detailTable.getContainerDataSource();
+                Item task = container.getItem(taskId);
+                Property taskAction = task.getItemProperty("action");
+                taskAction.setValue("Done");
+            }
 
         }
     }
