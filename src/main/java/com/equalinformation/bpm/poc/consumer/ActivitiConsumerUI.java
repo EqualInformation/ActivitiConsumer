@@ -5,12 +5,16 @@ import com.equalinformation.bpm.poc.consumer.ws.domain.Task;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
+import com.vaadin.data.Container;
+import com.vaadin.data.Item;
+import com.vaadin.data.Property;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.*;
 import com.vaadin.ui.MenuBar.MenuItem;
 
 import javax.servlet.annotation.WebServlet;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,10 +30,10 @@ public class ActivitiConsumerUI extends UI {
     public static class MyUIServlet extends VaadinServlet {
     }
 
-    Table summaryTable = null;
-    Table detailTable = null;
-    ActivitiRESTClient activitiRESTClient = null;
-    List<Task> taskList = null;
+    Table summaryTable = new Table("Inbox-Summary");
+    Table detailTable = new Table("Inbox-Detail");
+    ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
+    List<Task> taskList = new ArrayList<Task>();
 
 
     @Override
@@ -64,7 +68,6 @@ public class ActivitiConsumerUI extends UI {
     }
 
     private void createActivitiTaskTableSummary(VerticalLayout layout) {
-        summaryTable = new Table("Inbox-Summary");
 
         // Columns
         summaryTable.addContainerProperty("ID", String.class, null);
@@ -126,7 +129,6 @@ public class ActivitiConsumerUI extends UI {
     }
 
     private void createActivitiTaskTableDetail(VerticalLayout layout) {
-        detailTable = new Table("Inbox-Detail");
         detailTable.setSelectable(true);
 
         // Columns
@@ -195,8 +197,7 @@ public class ActivitiConsumerUI extends UI {
     }
 
     private List<Task> fetchTaskDataFromActivitiEngine() {
-        activitiRESTClient = new ActivitiRESTClient();
-        List<Task> taskList = activitiRESTClient.getTaskList();
+        taskList = activitiRESTClient.getTaskList();
         System.out.println("First element ID: "+taskList.get(0).getId());
         return taskList;
     }
@@ -230,14 +231,15 @@ public class ActivitiConsumerUI extends UI {
             String taskId = (String) event.getButton().getData();
             System.out.println("Button clicked : " + taskId);
 
-            ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
             completed = activitiRESTClient.completeTask(taskId);
 
             if (completed == true) {
-                //TODO refresh table
+                System.out.println("Status: " + ((completed) ? "completed":"failed"));
+                Container container = detailTable.getContainerDataSource();
+                Item task = container.getItem(taskId);
+                Property taskAction = task.getItemProperty("action");
+                taskAction.setValue("Done");
             }
-
-            System.out.println("Status: " + ((completed) ? "completed":"failed"));
 
         }
     }
