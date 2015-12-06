@@ -237,7 +237,7 @@ public class ActivitiConsumerUI extends UI {
                 System.out.println("Status: " + ((completed) ? "completed":"failed"));
                 Container container = detailTable.getContainerDataSource();
                 Item task = container.getItem(taskId);
-                Property taskAction = task.getItemProperty("Action");
+                Property taskAction = task.getItemProperty("action");
                 taskAction.setValue("Done");
             }
 
