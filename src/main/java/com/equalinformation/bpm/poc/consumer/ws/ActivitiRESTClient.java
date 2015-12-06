@@ -60,7 +60,9 @@ public class ActivitiRESTClient {
             }
 
             System.out.println("Size of list: " + taskList.size());
-            System.out.println("Some data from first element: " + taskList.get(0).getName());
+            if(taskList.size() >= 1) {
+                System.out.println("Some data from first element: " + taskList.get(0).getName());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
