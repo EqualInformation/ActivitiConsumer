@@ -94,111 +94,121 @@ public class ActivitiConsumerUI extends UI {
 //        summaryTable.addContainerProperty("Variables",  String[].class, null);
 
         // Rows
-        int i = 0;
-        for(Task task: taskList) {
-            summaryTable.addItem(new Object[]{task.getId(),
-                    task.getUrl(),
-//                    task.getOwner(),
-//                    task.getAssignee(),
-//                    task.getDelegationState(),
-//                    task.getName(),
-//                    task.getDescription(),
-//                    task.getCreateTime(),
-//                    task.getDueDate(),
-//                    task.getPriority(),
-//                    task.getSuspended(),
-//                    task.getTaskDefinitionKey(),
-//                    task.getTenantId(),
-//                    task.getCategory(),
-//                    task.getFormKey(),
-//                    task.getParentTaskId(),
-//                    task.getParentTaskURL(),
-//                    task.getExecutionId(),
-//                    task.getExecutionURL(),
-//                    task.getProcessDefinitionId(),
-//                    task.getProcessDefinitionURL()
-                    //task.getVariables()
-            },
-                    ++i);
-        }
+        if (taskList.size() >= 1) {
+            int i = 0;
+            for (Task task : taskList) {
+                summaryTable.addItem(new Object[]{task.getId(),
+                        task.getUrl(),
+//                        task.getOwner(),
+//                        task.getAssignee(),
+//                        task.getDelegationState(),
+//                        task.getName(),
+//                        task.getDescription(),
+//                        task.getCreateTime(),
+//                        task.getDueDate(),
+//                        task.getPriority(),
+//                        task.getSuspended(),
+//                        task.getTaskDefinitionKey(),
+//                        task.getTenantId(),
+//                        task.getCategory(),
+//                        task.getFormKey(),
+//                        task.getParentTaskId(),
+//                        task.getParentTaskURL(),
+//                        task.getExecutionId(),
+//                        task.getExecutionURL(),
+//                        task.getProcessDefinitionId(),
+//                        task.getProcessDefinitionURL()
+//                        task.getVariables()
+                        },
+                        ++i);
+            }
 
-        // Show exactly the currently contained rows (items)
-        summaryTable.setPageLength(summaryTable.size());
+            // Show exactly the currently contained rows (items)
+            summaryTable.setPageLength(summaryTable.size());
+        } else {
+            summaryTable.addItem(new Object[]{"0","No task found"},0);
+
+        }
 
         layout.addComponent(summaryTable);
     }
 
     private void createActivitiTaskTableDetail(VerticalLayout layout) {
-        detailTable.setSelectable(true);
+        if(taskList.size() >= 1) {
+            detailTable.setSelectable(true);
 
-        // Columns
-        detailTable.addContainerProperty("ID", String.class, null);
+            // Columns
+            detailTable.addContainerProperty("ID", String.class, null);
 //        detailTable.addContainerProperty("URL",  String.class, null);
 //        detailTable.addContainerProperty("Owner", String.class, null);
 //        detailTable.addContainerProperty("Assignee",  String.class, null);
 //        detailTable.addContainerProperty("Delegation State",  String.class, null);
-        detailTable.addContainerProperty("Name", String.class, null);
+            detailTable.addContainerProperty("Name", String.class, null);
 //        detailTable.addContainerProperty("Description",  String.class, null);
-        detailTable.addContainerProperty("Create time", String.class, null);
+            detailTable.addContainerProperty("Create time", String.class, null);
 //        detailTable.addContainerProperty("Due date",  String.class, null);
-        detailTable.addContainerProperty("Priority",  String.class, null);
-        detailTable.addContainerProperty("Suspended", String.class, null);
+            detailTable.addContainerProperty("Priority", String.class, null);
+            detailTable.addContainerProperty("Suspended", String.class, null);
 //        detailTable.addContainerProperty("Task definition key",  String.class, null);
 //        detailTable.addContainerProperty("Tenant ID", String.class, null);
 //        detailTable.addContainerProperty("Category",  String.class, null);
 //        detailTable.addContainerProperty("Form key",  String.class, null);
 //        detailTable.addContainerProperty("Parent task ID", String.class, null);
 //        detailTable.addContainerProperty("Parent task URL",  String.class, null);
-        detailTable.addContainerProperty("Execution ID", String.class, null);
+            detailTable.addContainerProperty("Execution ID", String.class, null);
 //        detailTable.addContainerProperty("Execution URL",  String.class, null);
 //        detailTable.addContainerProperty("Process definition ID",  String.class, null);
 //        detailTable.addContainerProperty("Process definition URL", String.class, null);
-        //table.addContainerProperty("Variables",  String[].class, null);
-        detailTable.addContainerProperty("Action", Button.class, null);
+            //table.addContainerProperty("Variables",  String[].class, null);
+            detailTable.addContainerProperty("Action", Button.class, null);
 
-        // Rows
-        int i = 0;
-        for(Task task: taskList) {
-            task.getAction().setCaption("Complete");
-            task.getAction().setData(task.getId());
-            task.getAction().addListener(new TaskActionListener()); //TODO
+            // Rows
+            int i = 0;
+            for (Task task : taskList) {
+                task.getAction().setCaption("Complete");
+                task.getAction().setData("row" + i);
+                task.getAction().addListener(new TaskActionListener()); //TODO
 
-            detailTable.addItem(new Object[]{task.getId(),
-//                    task.getUrl(),
-//                    task.getOwner(),
-//                    task.getAssignee(),
-//                    task.getDelegationState(),
-                    task.getName(),
-//                    task.getDescription(),
-                    task.getCreateTime(),
-//                    task.getDueDate(),
-                    task.getPriority(),
-                    task.getSuspended(),
-//                    task.getTaskDefinitionKey(),
-//                    task.getTenantId(),
-//                    task.getCategory(),
-//                    task.getFormKey(),
-//                    task.getParentTaskId(),
-//                    task.getParentTaskURL(),
-                    task.getExecutionId(),
-//                    task.getExecutionURL(),
-//                    task.getProcessDefinitionId(),
-//                    task.getProcessDefinitionURL()
-                            //task.getVariables()
-                    task.getAction()
-                    },
-                    ++i);
+                detailTable.addItem(new Object[]{task.getId(),
+//                        task.getUrl(),
+//                        task.getOwner(),
+//                        task.getAssignee(),
+//                        task.getDelegationState(),
+                        task.getName(),
+//                        task.getDescription(),
+                        task.getCreateTime(),
+//                        task.getDueDate(),
+                        task.getPriority(),
+                        task.getSuspended(),
+//                        task.getTaskDefinitionKey(),
+//                        task.getTenantId(),
+//                        task.getCategory(),
+//                        task.getFormKey(),
+//                        task.getParentTaskId(),
+//                        task.getParentTaskURL(),
+                        task.getExecutionId(),
+//                        task.getExecutionURL(),
+//                        task.getProcessDefinitionId(),
+//                        task.getProcessDefinitionURL()
+//                        task.getVariables()
+                        task.getAction()
+                        },
+                        "row" + i);
+                i += 1;
+            }
+
+            // Show exactly the currently contained rows (items)
+            detailTable.setPageLength(detailTable.size());
         }
-
-        // Show exactly the currently contained rows (items)
-        detailTable.setPageLength(detailTable.size());
 
         layout.addComponent(detailTable);
     }
 
     private List<Task> fetchTaskDataFromActivitiEngine() {
         taskList = activitiRESTClient.getTaskList();
-        System.out.println("First element ID: "+taskList.get(0).getId());
+        if(taskList.size() >= 1) {
+            System.out.println("First element ID: " + taskList.get(0).getId());
+        }
         return taskList;
     }
 
@@ -228,17 +238,18 @@ public class ActivitiConsumerUI extends UI {
         @Override
         public void buttonClick(Button.ClickEvent event) {
             boolean completed = false;
-            String taskId = (String) event.getButton().getData();
+            String rowId = (String) event.getButton().getData();
+            Container container = detailTable.getContainerDataSource();
+            Item task = container.getItem(rowId);
+            Property taskAction = task.getItemProperty("Action");
+            String taskId = task.getItemProperty("ID").getValue().toString();
             System.out.println("Button clicked : " + taskId);
 
             completed = activitiRESTClient.completeTask(taskId);
 
             if (completed == true) {
                 System.out.println("Status: " + ((completed) ? "completed":"failed"));
-                Container container = detailTable.getContainerDataSource();
-                Item task = container.getItem(taskId);
-                Property taskAction = task.getItemProperty("action");
-                taskAction.setValue("Done");
+                taskAction.setValue(new Button("Done"));
             }
 
         }
