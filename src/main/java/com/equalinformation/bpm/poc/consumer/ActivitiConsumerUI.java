@@ -134,35 +134,35 @@ public class ActivitiConsumerUI extends UI {
     }
 
     private void createActivitiTaskTableDetail(VerticalLayout layout) {
-        if(taskList.size() >= 1) {
-            detailTable.setSelectable(true);
+        detailTable.setSelectable(true);
 
             // Columns
-            detailTable.addContainerProperty("ID", String.class, null);
+        detailTable.addContainerProperty("ID", String.class, null);
 //        detailTable.addContainerProperty("URL",  String.class, null);
 //        detailTable.addContainerProperty("Owner", String.class, null);
 //        detailTable.addContainerProperty("Assignee",  String.class, null);
 //        detailTable.addContainerProperty("Delegation State",  String.class, null);
-            detailTable.addContainerProperty("Name", String.class, null);
+        detailTable.addContainerProperty("Name", String.class, null);
 //        detailTable.addContainerProperty("Description",  String.class, null);
-            detailTable.addContainerProperty("Create time", String.class, null);
+        detailTable.addContainerProperty("Create time", String.class, null);
 //        detailTable.addContainerProperty("Due date",  String.class, null);
-            detailTable.addContainerProperty("Priority", String.class, null);
-            detailTable.addContainerProperty("Suspended", String.class, null);
+        detailTable.addContainerProperty("Priority", String.class, null);
+        detailTable.addContainerProperty("Suspended", String.class, null);
 //        detailTable.addContainerProperty("Task definition key",  String.class, null);
 //        detailTable.addContainerProperty("Tenant ID", String.class, null);
 //        detailTable.addContainerProperty("Category",  String.class, null);
 //        detailTable.addContainerProperty("Form key",  String.class, null);
 //        detailTable.addContainerProperty("Parent task ID", String.class, null);
 //        detailTable.addContainerProperty("Parent task URL",  String.class, null);
-            detailTable.addContainerProperty("Execution ID", String.class, null);
+        detailTable.addContainerProperty("Execution ID", String.class, null);
 //        detailTable.addContainerProperty("Execution URL",  String.class, null);
 //        detailTable.addContainerProperty("Process definition ID",  String.class, null);
 //        detailTable.addContainerProperty("Process definition URL", String.class, null);
             //table.addContainerProperty("Variables",  String[].class, null);
-            detailTable.addContainerProperty("Action", Button.class, null);
+        detailTable.addContainerProperty("Action", Button.class, null);
 
             // Rows
+        if(taskList.size() >= 1) {
             int i = 0;
             for (Task task : taskList) {
                 task.getAction().setCaption("Complete");
@@ -199,6 +199,8 @@ public class ActivitiConsumerUI extends UI {
 
             // Show exactly the currently contained rows (items)
             detailTable.setPageLength(detailTable.size());
+        } else {
+            detailTable.addItem(new Object[]{"0","None", "None", "None", "None", "None", new Button("No action required")},0);
         }
 
         layout.addComponent(detailTable);

@@ -226,7 +226,7 @@ public class Task {
 
     public Button getAction() {
         if(this.action == null) {
-            action = new Button("Action");
+            action = new Button("Unknown action");
         }
 
         return action;
