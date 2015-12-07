@@ -252,6 +252,7 @@ public class ActivitiConsumerUI extends UI {
             if (completed == true) {
                 System.out.println("Status: " + ((completed) ? "completed":"failed"));
                 taskAction.setValue(new Button("Done"));
+                detailTable.removeItem(rowId);
             }
 
         }
