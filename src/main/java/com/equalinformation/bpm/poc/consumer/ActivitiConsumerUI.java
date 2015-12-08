@@ -63,6 +63,7 @@ public class ActivitiConsumerUI extends UI {
         };
 
         taskList = fetchTaskDataFromActivitiEngine();
+        historicTaskList = fetchHistoricTaskDataFromActivitiEngine();
 
         MenuBar menuBar = createMenuBar(menuCommand, inboxCommand);
 
@@ -219,10 +220,10 @@ public class ActivitiConsumerUI extends UI {
 
     private List<Task> fetchHistoricTaskDataFromActivitiEngine() {
         historicTaskList = activitiRESTClient.getHistoricActivitiInstances();
-        if(taskList.size() >= 1) {
-            System.out.println("First element ID: " + taskList.get(0).getId());
+        if(historicTaskList.size() >= 1) {
+            System.out.println("First element ID: " + historicTaskList.get(0).getId());
         }
-        return taskList;
+        return historicTaskList;
     }
 
     private MenuBar createMenuBar(MenuBar.Command menuCommand, MenuBar.Command inboxCommand) {
@@ -282,7 +283,7 @@ public class ActivitiConsumerUI extends UI {
 //        detailTable.addContainerProperty("Description",  String.class, null);
         historicActivitiInstancesTable.addContainerProperty("Create time", String.class, null);
 //        detailTable.addContainerProperty("Due date",  String.class, null);
-        detailTable.addContainerProperty("Priority", String.class, null);
+        historicActivitiInstancesTable.addContainerProperty("Priority", String.class, null);
         historicActivitiInstancesTable.addContainerProperty("Suspended", String.class, null);
 //        detailTable.addContainerProperty("Task definition key",  String.class, null);
 //        detailTable.addContainerProperty("Tenant ID", String.class, null);

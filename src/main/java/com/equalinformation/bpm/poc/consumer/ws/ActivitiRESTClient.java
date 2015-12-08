@@ -97,7 +97,7 @@ public class ActivitiRESTClient {
 
     //TODO modify later for parameter, current one is the first pass
     public List<Task> getHistoricActivitiInstances() {
-        List<Task> taskList = null;
+        List<Task> historicTaskList = null;
         try {
             Client client = Client.create();
             client.addFilter(new HTTPBasicAuthFilter("kermit", "kermit"));
@@ -120,30 +120,30 @@ public class ActivitiRESTClient {
             JsonElement taskElement = rootObject.get("data");
 
             Gson gson = new Gson();
-            taskList = new ArrayList<Task>();
+            historicTaskList = new ArrayList<Task>();
 
             // Check if "task" element is an array or an object and parse accordingly.
             if (taskElement.isJsonObject()) {
                 //The returned list has only 1 element
                 Task task = gson.fromJson(taskElement, Task.class);
-                taskList.add(task);
+                historicTaskList.add(task);
             } else if (taskElement.isJsonArray()) {
                 //The returned list has >1 elements
                 Type projectListType = new TypeToken<List<Task>>() {
                 }.getType();
-                taskList = gson.fromJson(taskElement, projectListType);
+                historicTaskList = gson.fromJson(taskElement, projectListType);
             }
 
-            System.out.println("Size of list: " + taskList.size());
-            if(taskList.size() >= 1) {
-                System.out.println("Some data from first element: " + taskList.get(0).getName());
+            System.out.println("Size of list: " + historicTaskList.size());
+            if(historicTaskList.size() >= 1) {
+                System.out.println("Some data from first element: " + historicTaskList.get(0).getName());
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return taskList;
+        return historicTaskList;
     }
 
 }
