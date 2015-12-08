@@ -32,8 +32,10 @@ public class ActivitiConsumerUI extends UI {
 
     Table summaryTable = new Table("Inbox-Summary");
     Table detailTable = new Table("Inbox-Detail");
+    Table historicActivitiInstancesTable = new Table("Historic-Activiti-Instances");
     ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
     List<Task> taskList = new ArrayList<Task>();
+    List<Task> historicTaskList = new ArrayList<Task>();
 
 
     @Override
@@ -56,6 +58,7 @@ public class ActivitiConsumerUI extends UI {
             public void menuSelected(MenuItem selectedItem) {
                 createActivitiTaskTableSummary(layout);
                 createActivitiTaskTableDetail(layout);
+                createActivitiHistoricInstancesTable(layout);
             }
         };
 
@@ -214,6 +217,14 @@ public class ActivitiConsumerUI extends UI {
         return taskList;
     }
 
+    private List<Task> fetchHistoricTaskDataFromActivitiEngine() {
+        historicTaskList = activitiRESTClient.getHistoricActivitiInstances();
+        if(taskList.size() >= 1) {
+            System.out.println("First element ID: " + taskList.get(0).getId());
+        }
+        return taskList;
+    }
+
     private MenuBar createMenuBar(MenuBar.Command menuCommand, MenuBar.Command inboxCommand) {
         MenuBar menuBar = new MenuBar();
 
@@ -256,6 +267,77 @@ public class ActivitiConsumerUI extends UI {
             }
 
         }
+    }
+
+    private void createActivitiHistoricInstancesTable(VerticalLayout layout) {
+        historicActivitiInstancesTable.setSelectable(true);
+
+        // Columns
+        historicActivitiInstancesTable.addContainerProperty("ID", String.class, null);
+//        detailTable.addContainerProperty("URL",  String.class, null);
+//        detailTable.addContainerProperty("Owner", String.class, null);
+//        detailTable.addContainerProperty("Assignee",  String.class, null);
+//        detailTable.addContainerProperty("Delegation State",  String.class, null);
+        historicActivitiInstancesTable.addContainerProperty("Name", String.class, null);
+//        detailTable.addContainerProperty("Description",  String.class, null);
+        historicActivitiInstancesTable.addContainerProperty("Create time", String.class, null);
+//        detailTable.addContainerProperty("Due date",  String.class, null);
+        detailTable.addContainerProperty("Priority", String.class, null);
+        historicActivitiInstancesTable.addContainerProperty("Suspended", String.class, null);
+//        detailTable.addContainerProperty("Task definition key",  String.class, null);
+//        detailTable.addContainerProperty("Tenant ID", String.class, null);
+//        detailTable.addContainerProperty("Category",  String.class, null);
+//        detailTable.addContainerProperty("Form key",  String.class, null);
+//        detailTable.addContainerProperty("Parent task ID", String.class, null);
+//        detailTable.addContainerProperty("Parent task URL",  String.class, null);
+        historicActivitiInstancesTable.addContainerProperty("Execution ID", String.class, null);
+//        detailTable.addContainerProperty("Execution URL",  String.class, null);
+//        detailTable.addContainerProperty("Process definition ID",  String.class, null);
+//        detailTable.addContainerProperty("Process definition URL", String.class, null);
+        //table.addContainerProperty("Variables",  String[].class, null);
+
+        // Rows
+        if(historicTaskList.size() >= 1) {
+            int i = 0;
+            for (Task task : historicTaskList) {
+                task.getAction().setCaption("Complete");
+                task.getAction().setData("row" + i);
+                task.getAction().addListener(new TaskActionListener()); //TODO
+
+                historicActivitiInstancesTable.addItem(new Object[]{task.getId(),
+//                        task.getUrl(),
+//                        task.getOwner(),
+//                        task.getAssignee(),
+//                        task.getDelegationState(),
+                                task.getName(),
+//                        task.getDescription(),
+                                task.getCreateTime(),
+//                        task.getDueDate(),
+                                task.getPriority(),
+                                task.getSuspended(),
+//                        task.getTaskDefinitionKey(),
+//                        task.getTenantId(),
+//                        task.getCategory(),
+//                        task.getFormKey(),
+//                        task.getParentTaskId(),
+//                        task.getParentTaskURL(),
+                                task.getExecutionId(),
+//                        task.getExecutionURL(),
+//                        task.getProcessDefinitionId(),
+//                        task.getProcessDefinitionURL()
+//                        task.getVariables()
+                        },
+                        "row" + i);
+                i += 1;
+            }
+
+            // Show exactly the currently contained rows (items)
+            historicActivitiInstancesTable.setPageLength(historicActivitiInstancesTable.size());
+        } else {
+            historicActivitiInstancesTable.addItem(new Object[]{"0","None", "None", "None", "None", "None"},0);
+        }
+
+        layout.addComponent(historicActivitiInstancesTable);
     }
 
 }

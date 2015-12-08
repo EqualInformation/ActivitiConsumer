@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by bpupadhyaya on 12/7/15.
  */
-public class HistoricActivitiInstances {
+public class HistoricActivitiInstancesTest {
     public static void main(String...args) {
         try {
             Client client = Client.create();
