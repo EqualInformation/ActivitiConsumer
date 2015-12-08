@@ -300,10 +300,6 @@ public class ActivitiConsumerUI extends UI {
         if(historicTaskList.size() >= 1) {
             int i = 0;
             for (Task task : historicTaskList) {
-                task.getAction().setCaption("Complete");
-                task.getAction().setData("row" + i);
-                task.getAction().addListener(new TaskActionListener()); //TODO
-
                 historicActivitiInstancesTable.addItem(new Object[]{task.getId(),
 //                        task.getUrl(),
 //                        task.getOwner(),
