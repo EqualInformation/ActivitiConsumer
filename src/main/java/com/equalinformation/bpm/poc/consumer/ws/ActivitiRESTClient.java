@@ -86,6 +86,7 @@ public class ActivitiRESTClient {
                 throw new RuntimeException("Activiti call failed : HTTP error code : "
                         + response.getStatus());
             }
+            System.out.println("completeTask(): Response status: "+response.getStatus());
             success = true;
 
         } catch(Exception e) {
