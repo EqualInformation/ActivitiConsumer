@@ -1,6 +1,6 @@
 package com.equalinformation.bpm.poc.consumer.ws.test;
 
-import com.equalinformation.bpm.poc.consumer.ws.domain.Task;
+import com.equalinformation.bpm.poc.consumer.ws.domain.TaskHistory;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -23,7 +23,7 @@ public class HistoricActivitiInstancesTest {
         try {
             Client client = Client.create();
             client.addFilter(new HTTPBasicAuthFilter("kermit", "kermit"));
-            WebResource webResource = client.resource("http://localhost:8091/activiti-rest/service/history/historic-activity-instances");
+            WebResource webResource = client.resource("http://localhost:8091/activiti-rest/service/history/historic-activity-instances?start=0&size=100&sort=endTime&order=desc");
             ClientResponse response = webResource.accept("application/json").get(ClientResponse.class);
 
             if (response.getStatus() != 200) {
@@ -42,22 +42,22 @@ public class HistoricActivitiInstancesTest {
             JsonElement taskElement = rootObject.get("data");
 
             Gson gson = new Gson();
-            List<Task> taskList = new ArrayList<Task>();
+            List<TaskHistory> taskHistoryList = new ArrayList<TaskHistory>();
 
             // Check if "task" element is an array or an object and parse accordingly.
             if (taskElement.isJsonObject()) {
                 //The returned list has only 1 element
-                Task task = gson.fromJson(taskElement, Task.class);
-                taskList.add(task);
+                TaskHistory taskHistory = gson.fromJson(taskElement, TaskHistory.class);
+                taskHistoryList.add(taskHistory);
             }
             else if (taskElement.isJsonArray()) {
                 //The returned list has >1 elements
-                Type projectListType = new TypeToken<List<Task>>() {}.getType();
-                taskList = gson.fromJson(taskElement, projectListType);
+                Type projectListType = new TypeToken<List<TaskHistory>>() {}.getType();
+                taskHistoryList = gson.fromJson(taskElement, projectListType);
             }
 
-            System.out.println("Size of list: " + taskList.size());
-            System.out.println("Some data from first element: " + taskList.get(0).getName());
+            System.out.println("Size of list: " + taskHistoryList.size());
+            System.out.println("Some data from first element: " + taskHistoryList.get(0).getAssignee());
 
 
         } catch (Exception e) {
