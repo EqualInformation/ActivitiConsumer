@@ -2,6 +2,7 @@ package com.equalinformation.bpm.poc.consumer;
 
 import com.equalinformation.bpm.poc.consumer.ws.ActivitiRESTClient;
 import com.equalinformation.bpm.poc.consumer.ws.domain.Task;
+import com.equalinformation.bpm.poc.consumer.ws.domain.TaskHistory;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
@@ -35,7 +36,7 @@ public class ActivitiConsumerUI extends UI {
     Table historicActivitiInstancesTable = new Table("Historic-Activiti-Instances");
     ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
     List<Task> taskList = new ArrayList<Task>();
-    List<Task> historicTaskList = new ArrayList<Task>();
+    List<TaskHistory> historicTaskList = new ArrayList<TaskHistory>();
 
 
     @Override
@@ -160,7 +161,8 @@ public class ActivitiConsumerUI extends UI {
 //        detailTable.addContainerProperty("Parent task URL",  String.class, null);
         detailTable.addContainerProperty("Execution ID", String.class, null);
 //        detailTable.addContainerProperty("Execution URL",  String.class, null);
-//        detailTable.addContainerProperty("Process definition ID",  String.class, null);
+        detailTable.addContainerProperty("Process Instance ID", String.class, null);
+        detailTable.addContainerProperty("Process definition ID",  String.class, null);
 //        detailTable.addContainerProperty("Process definition URL", String.class, null);
             //table.addContainerProperty("Variables",  String[].class, null);
         detailTable.addContainerProperty("Action", Button.class, null);
@@ -192,7 +194,8 @@ public class ActivitiConsumerUI extends UI {
 //                        task.getParentTaskURL(),
                         task.getExecutionId(),
 //                        task.getExecutionURL(),
-//                        task.getProcessDefinitionId(),
+                        task.getProcessInstanceId(),
+                        task.getProcessDefinitionId(),
 //                        task.getProcessDefinitionURL()
 //                        task.getVariables()
                         task.getAction()
@@ -204,7 +207,7 @@ public class ActivitiConsumerUI extends UI {
             // Show exactly the currently contained rows (items)
             detailTable.setPageLength(detailTable.size());
         } else {
-            detailTable.addItem(new Object[]{"0","None", "None", "None", "None", "None", new Button("No action required")},0);
+            detailTable.addItem(new Object[]{"0","None", "None", "None", "None", "None", "None", new Button("No action required")},0);
         }
 
         layout.addComponent(detailTable);
@@ -218,7 +221,7 @@ public class ActivitiConsumerUI extends UI {
         return taskList;
     }
 
-    private List<Task> fetchHistoricTaskDataFromActivitiEngine() {
+    private List<TaskHistory> fetchHistoricTaskDataFromActivitiEngine() {
         historicTaskList = activitiRESTClient.getHistoricActivitiInstances();
         if(historicTaskList.size() >= 1) {
             System.out.println("First element ID: " + historicTaskList.get(0).getId());
@@ -271,58 +274,48 @@ public class ActivitiConsumerUI extends UI {
     }
 
     private void createActivitiHistoricInstancesTable(VerticalLayout layout) {
-        historicActivitiInstancesTable.setSelectable(true);
 
         // Columns
+        historicActivitiInstancesTable.addContainerProperty("Count", String.class, null);
         historicActivitiInstancesTable.addContainerProperty("ID", String.class, null);
-//        detailTable.addContainerProperty("URL",  String.class, null);
-//        detailTable.addContainerProperty("Owner", String.class, null);
-//        detailTable.addContainerProperty("Assignee",  String.class, null);
-//        detailTable.addContainerProperty("Delegation State",  String.class, null);
-        historicActivitiInstancesTable.addContainerProperty("Name", String.class, null);
-//        detailTable.addContainerProperty("Description",  String.class, null);
-        historicActivitiInstancesTable.addContainerProperty("Create time", String.class, null);
-//        detailTable.addContainerProperty("Due date",  String.class, null);
-        historicActivitiInstancesTable.addContainerProperty("Priority", String.class, null);
-        historicActivitiInstancesTable.addContainerProperty("Suspended", String.class, null);
-//        detailTable.addContainerProperty("Task definition key",  String.class, null);
-//        detailTable.addContainerProperty("Tenant ID", String.class, null);
-//        detailTable.addContainerProperty("Category",  String.class, null);
-//        detailTable.addContainerProperty("Form key",  String.class, null);
-//        detailTable.addContainerProperty("Parent task ID", String.class, null);
-//        detailTable.addContainerProperty("Parent task URL",  String.class, null);
-        historicActivitiInstancesTable.addContainerProperty("Execution ID", String.class, null);
-//        detailTable.addContainerProperty("Execution URL",  String.class, null);
-//        detailTable.addContainerProperty("Process definition ID",  String.class, null);
-//        detailTable.addContainerProperty("Process definition URL", String.class, null);
-        //table.addContainerProperty("Variables",  String[].class, null);
+        historicActivitiInstancesTable.addContainerProperty("Activity ID", String.class, null);
+        historicActivitiInstancesTable.addContainerProperty("Activity Name", String.class, null);
+        historicActivitiInstancesTable.addContainerProperty("Activity Type", String.class, null);
+        historicActivitiInstancesTable.addContainerProperty("Process Definition ID", String.class, null);
+//        historicActivitiInstancesTable.addContainerProperty("Process Definition URL", String.class, null);
+        historicActivitiInstancesTable.addContainerProperty("Process Instance ID", String.class, null);
+//        historicActivitiInstancesTable.addContainerProperty("Process Instance URL", String.class, null);
+//        historicActivitiInstancesTable.addContainerProperty("Execution ID", String.class, null);
+        historicActivitiInstancesTable.addContainerProperty("Task ID", String.class, null);
+//        historicActivitiInstancesTable.addContainerProperty("Called Process Instance ID", String.class, null);
+        historicActivitiInstancesTable.addContainerProperty("Asignee", String.class, null);
+        historicActivitiInstancesTable.addContainerProperty("Start Time", String.class, null);
+        historicActivitiInstancesTable.addContainerProperty("End Time", String.class, null);
+        historicActivitiInstancesTable.addContainerProperty("Duration in Millis", String.class, null);
+        historicActivitiInstancesTable.addContainerProperty("Tenant ID", String.class, null);
+
 
         // Rows
         if(historicTaskList.size() >= 1) {
             int i = 0;
-            for (Task task : historicTaskList) {
-                historicActivitiInstancesTable.addItem(new Object[]{task.getId(),
-//                        task.getUrl(),
-//                        task.getOwner(),
-//                        task.getAssignee(),
-//                        task.getDelegationState(),
-                                task.getName(),
-//                        task.getDescription(),
-                                task.getCreateTime(),
-//                        task.getDueDate(),
-                                task.getPriority(),
-                                task.getSuspended(),
-//                        task.getTaskDefinitionKey(),
-//                        task.getTenantId(),
-//                        task.getCategory(),
-//                        task.getFormKey(),
-//                        task.getParentTaskId(),
-//                        task.getParentTaskURL(),
-                                task.getExecutionId(),
-//                        task.getExecutionURL(),
-//                        task.getProcessDefinitionId(),
-//                        task.getProcessDefinitionURL()
-//                        task.getVariables()
+            for (TaskHistory taskHistory : historicTaskList) {
+                historicActivitiInstancesTable.addItem(new Object[]{(i+1)+"",
+                        taskHistory.getId(),
+                        taskHistory.getActivityId(),
+                        taskHistory.getActivityName(),
+                        taskHistory.getActivityType(),
+                        taskHistory.getProcessDefinitionId(),
+//                        taskHistory.getProcessDefinitionUrl(),
+                        taskHistory.getProcessInstanceId(),
+//                        taskHistory.getProcessInstanceUrl(),
+//                        taskHistory.getExecutionId(),
+                        taskHistory.getTaskId(),
+//                        taskHistory.getCalledProcessInstanceId(),
+                        taskHistory.getAssignee(),
+                        taskHistory.getStartTime(),
+                        taskHistory.getEndTime(),
+                        taskHistory.getDurationInMillis(),
+                        taskHistory.getTenantId()
                         },
                         "row" + i);
                 i += 1;
@@ -331,7 +324,7 @@ public class ActivitiConsumerUI extends UI {
             // Show exactly the currently contained rows (items)
             historicActivitiInstancesTable.setPageLength(historicActivitiInstancesTable.size());
         } else {
-            historicActivitiInstancesTable.addItem(new Object[]{"0","None", "None", "None", "None", "None"},0);
+            historicActivitiInstancesTable.addItem(new Object[]{"0","None", "None", "None", "None", "None", "None", "None", "None", "None", "None", "None", "None", "None", "None", "None"},0);
         }
 
         layout.addComponent(historicActivitiInstancesTable);
