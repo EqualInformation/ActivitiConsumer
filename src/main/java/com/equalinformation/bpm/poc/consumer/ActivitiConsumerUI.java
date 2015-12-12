@@ -31,12 +31,14 @@ public class ActivitiConsumerUI extends UI {
     public static class MyUIServlet extends VaadinServlet {
     }
 
-    Table summaryTable = new Table("Inbox-Summary");
-    Table detailTable = new Table("Inbox-Detail");
-    Table historicActivitiInstancesTable = new Table("Historic-Activiti-Instances");
-    ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
-    List<Task> taskList = new ArrayList<Task>();
-    List<TaskHistory> historicTaskList = new ArrayList<TaskHistory>();
+    private Table summaryTable = new Table("Inbox-Summary");
+    private Table detailTable = new Table("Inbox-Detail");
+    private Table historicActivitiInstancesTable = new Table("Historic-Activiti-Instances");
+    private ActivitiRESTClient activitiRESTClient = new ActivitiRESTClient();
+    private List<Task> taskList = new ArrayList<Task>();
+    private List<TaskHistory> historicTaskList = new ArrayList<TaskHistory>();
+    private int inboxCount = 0;
+    private int archivedCount = 0;
 
 
     @Override
@@ -55,18 +57,26 @@ public class ActivitiConsumerUI extends UI {
             }
         };
 
+        taskList = fetchTaskDataFromActivitiEngine();
+        historicTaskList = fetchHistoricTaskDataFromActivitiEngine();
+        inboxCount = taskList.size();
+        archivedCount = historicTaskList.size();
+
         MenuBar.Command inboxCommand = new MenuBar.Command() {
             public void menuSelected(MenuItem selectedItem) {
                 createActivitiTaskTableSummary(layout);
                 createActivitiTaskTableDetail(layout);
+            }
+        };
+
+        MenuBar.Command archivedCommand = new MenuBar.Command() {
+            public void menuSelected(MenuItem selectedItem) {
                 createActivitiHistoricInstancesTable(layout);
             }
         };
 
-        taskList = fetchTaskDataFromActivitiEngine();
-        historicTaskList = fetchHistoricTaskDataFromActivitiEngine();
 
-        MenuBar menuBar = createMenuBar(menuCommand, inboxCommand);
+        MenuBar menuBar = createMenuBar(menuCommand, inboxCommand, archivedCommand);
 
         layout.addComponent(menuBar);
 
@@ -229,7 +239,7 @@ public class ActivitiConsumerUI extends UI {
         return historicTaskList;
     }
 
-    private MenuBar createMenuBar(MenuBar.Command menuCommand, MenuBar.Command inboxCommand) {
+    private MenuBar createMenuBar(MenuBar.Command menuCommand, MenuBar.Command inboxCommand, MenuBar.Command archivedCommand) {
         MenuBar menuBar = new MenuBar();
 
         MenuItem tasks = menuBar.addItem("Tasks", null, null);
@@ -237,13 +247,13 @@ public class ActivitiConsumerUI extends UI {
         MenuItem reports = menuBar.addItem("Reports", null, null);
         MenuItem manage = menuBar.addItem("Manage", null, null);
 
-        MenuItem inbox = tasks.addItem("Inbox", null, inboxCommand);
+        MenuItem inbox = tasks.addItem("Inbox"+"("+inboxCount+")", null, inboxCommand);
         tasks.addSeparator();
         MenuItem queued = tasks.addItem("Queued", null, menuCommand);
         tasks.addSeparator();
         MenuItem involved = tasks.addItem("Involved", null, menuCommand);
         tasks.addSeparator();
-        MenuItem archived = tasks.addItem("Archived", null, menuCommand);
+        MenuItem archived = tasks.addItem("Archived"+"("+archivedCount+")", null, archivedCommand);
 
         MenuItem myInstances = processes.addItem("My instances", null, null);
         processes.addSeparator();
