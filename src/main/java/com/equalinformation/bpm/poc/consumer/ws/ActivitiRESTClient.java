@@ -27,7 +27,7 @@ public class ActivitiRESTClient {
         try {
             Client client = Client.create();
             client.addFilter(new HTTPBasicAuthFilter("kermit", "kermit"));
-            WebResource webResource = client.resource("http://localhost:8091/activiti-rest/service/runtime/tasks?candidateUser=kermit&size=100");
+            WebResource webResource = client.resource("http://localhost:8091/activiti-rest/service/runtime/tasks?assignee=kermit&size=100");
             ClientResponse response = webResource.accept("application/json").get(ClientResponse.class);
 
             if (response.getStatus() != 200) {
