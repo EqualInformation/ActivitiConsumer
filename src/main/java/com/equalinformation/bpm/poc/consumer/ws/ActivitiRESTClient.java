@@ -23,7 +23,7 @@ public class ActivitiRESTClient {
 
     //TODO modify later for parameter, current one is the first pass
     public List<Task> getTaskList() {
-        List<Task> taskList = null;
+        List<Task> taskList = new ArrayList<Task>();
         try {
             Client client = Client.create();
             client.addFilter(new HTTPBasicAuthFilter("kermit", "kermit"));
@@ -46,7 +46,6 @@ public class ActivitiRESTClient {
             JsonElement taskElement = rootObject.get("data");
 
             Gson gson = new Gson();
-            taskList = new ArrayList<Task>();
 
             // Check if "task" element is an array or an object and parse accordingly.
             if (taskElement.isJsonObject()) {
@@ -99,7 +98,7 @@ public class ActivitiRESTClient {
 
     //TODO modify later for parameter, current one is the first pass
     public List<TaskHistory> getHistoricActivitiInstances() {
-        List<TaskHistory> historicTaskList = null;
+        List<TaskHistory> historicTaskList = new ArrayList<TaskHistory>();
         try {
             Client client = Client.create();
             client.addFilter(new HTTPBasicAuthFilter("kermit", "kermit"));
@@ -122,7 +121,6 @@ public class ActivitiRESTClient {
             JsonElement taskElement = rootObject.get("data");
 
             Gson gson = new Gson();
-            historicTaskList = new ArrayList<TaskHistory>();
 
             // Check if "task" element is an array or an object and parse accordingly.
             if (taskElement.isJsonObject()) {
